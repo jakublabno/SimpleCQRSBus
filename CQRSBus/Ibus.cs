@@ -5,4 +5,6 @@ namespace CQRSBus;
 internal interface IBus<in T> where T : IMessage
 {
     TResult Handle<TResult>(T message);
+    
+    void Handle(T message);
 }
