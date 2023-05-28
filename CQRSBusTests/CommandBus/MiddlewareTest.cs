@@ -52,17 +52,34 @@ public class MiddlewareTest : CommandBusTestCase
     }
     
     [Test]
-    public void middleware_can_transform_given_messages()
+    public void middleware_can_transform_messages()
     {
         var originMessage = "not transformed message";
         var newMessage = "transformed property";
-        var transformingMiddleware = new TransformingMiddleware(newMessage);
-        AddMiddleWare(transformingMiddleware);
+        var transformingMiddleware = new TransformingMiddlewareWithOutput(newMessage);
+        AddMiddleWare(transformingMiddleware, new FirstMiddleware());
         var command = new SampleCommand(originMessage);
 
         CommandBus().Handle(command);
-        
-        Assert.AreEqual(newMessage, command.Input);
+
+        var expectedInput = newMessage;
+        Assert.AreEqual(expectedInput, command.Input);
+    }
+    
+    [Test]
+    public void propagate_transformed_message_in_chain()
+    {
+        var originMessage = "not transformed message";
+        var newMessage = "transformed property";
+        var transformingMiddleware = new TransformingMiddlewareWithOutput(newMessage);
+        var spyMiddleware = new SpyMiddleware();
+        AddMiddleWare(transformingMiddleware, spyMiddleware);
+        var command = new SampleCommand(originMessage);
+
+        CommandBus().Handle(command);
+
+        var expectedInput = ((SampleCommand)spyMiddleware.ExecutedCommand).Input;
+        Assert.AreEqual(newMessage, expectedInput);
     }
 
     private class FirstMiddleware : ICommandBusMiddleware
@@ -91,11 +108,11 @@ public class MiddlewareTest : CommandBusTestCase
         }
     }
     
-    private class TransformingMiddleware : ICommandBusMiddleware
+    private class TransformingMiddlewareWithOutput : ICommandBusMiddleware
     {
         private readonly string transformTo;
 
-        public TransformingMiddleware(string transformTo)
+        public TransformingMiddlewareWithOutput(string transformTo)
         {
             this.transformTo = transformTo;
         }
@@ -104,6 +121,20 @@ public class MiddlewareTest : CommandBusTestCase
         {
             var msg = (SampleCommand)message;
             msg.Input = transformTo;
+            
+            var del = (IMessage message) => callable(message);
+
+            return del;
+        }
+    }
+    
+    private class SpyMiddleware : ICommandBusMiddleware
+    {
+        public ICommand ExecutedCommand;
+        
+        public dynamic? Execute(ICommand message, Func<IMessage, dynamic>? callable)
+        {
+            ExecutedCommand = message;
 
             return default;
         }

@@ -2,7 +2,7 @@ using CQRSBus.Specialized;
 
 namespace CQRSBus.Locator;
 
-public interface IHandlerLocator<in T> where T : IMessage
+public interface IHandlerLocator
 {
     Type Name(IMessage message);
 }

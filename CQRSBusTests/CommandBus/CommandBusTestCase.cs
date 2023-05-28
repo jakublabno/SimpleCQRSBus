@@ -22,6 +22,11 @@ public abstract class CommandBusTestCase
 
         return bus;
     }
+    
+    protected void AddLoggerMiddleware()
+    {
+        AddMiddleWare(new LoggingMiddleware(Logging.Get()));
+    }
 
     protected void AddExecutorMiddleware()
     {
@@ -35,7 +40,7 @@ public abstract class CommandBusTestCase
             middlewareCollection.AddLast(middleware);
         }
     }
-    
+
     private static class Logging
     {
         public static ILogger Get()

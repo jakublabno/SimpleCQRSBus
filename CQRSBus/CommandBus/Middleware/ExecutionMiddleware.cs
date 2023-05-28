@@ -6,10 +6,10 @@ namespace CQRSBus.CommandBus.Middleware;
 
 public class ExecutionMiddleware : ICommandBusMiddleware
 {
-    private readonly IHandlerLocator<ICommand> handlerLocator;
+    private readonly IHandlerLocator handlerLocator;
     private readonly IHandlerCreator handlerCreator;
 
-    public ExecutionMiddleware(IHandlerLocator<ICommand> handlerLocator, IHandlerCreator handlerCreator)
+    public ExecutionMiddleware(IHandlerLocator handlerLocator, IHandlerCreator handlerCreator)
     {
         this.handlerLocator = handlerLocator;
         this.handlerCreator = handlerCreator;

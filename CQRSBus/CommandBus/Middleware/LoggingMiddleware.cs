@@ -15,10 +15,13 @@ public class LoggingMiddleware : ICommandBusMiddleware
 
     public dynamic? Execute(ICommand message, Func<IMessage, dynamic>? callable)
     {
+        var commandName = message.GetType().FullName;
         logger.Log(LogLevel.Information, $"Starting command {message.GetType().FullName}");
+        
+        var result = (IMessage message) => callable(message);
+        
+        logger.Log(LogLevel.Information, $"Finished command {message.GetType().FullName}");
 
-        var del = (IMessage message) => callable(message);
-
-        return del;
+        return default;
     }
 }

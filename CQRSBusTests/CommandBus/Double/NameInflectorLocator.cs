@@ -1,10 +1,9 @@
-using CQRSBus.CommandBus.Specialized;
 using CQRSBus.Locator;
 using CQRSBus.Specialized;
 
 namespace CQRSBusTests.CommandBus.Double;
 
-public class NameInflectorLocator : IHandlerLocator<ICommand>
+public class NameInflectorLocator : IHandlerLocator
 {
     private readonly string stringAddition;
 

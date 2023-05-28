@@ -23,18 +23,17 @@ public class BusMiddlewareAwareExecutor<T, TS, TU>
 
         while (localMiddlewareStack.Count > 0)
         {
-            var localCallable = localMiddlewareStack.Pop().Execute(message, lastCallable);
+            var middleware = localMiddlewareStack.Pop();
+            var localCallable = middleware.Execute(message, lastCallable);
 
             if (localCallable is not Delegate)
             {
                 return localCallable;
             }
-            else
-            {
-                lastCallable = localCallable;
-            }
+
+            lastCallable = localCallable;
         }
 
-        return lastCallable(message);
+        return lastCallable?.Invoke(message);
     }
 }
