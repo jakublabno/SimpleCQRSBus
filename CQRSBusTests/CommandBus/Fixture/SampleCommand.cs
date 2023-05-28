@@ -4,7 +4,7 @@ namespace CQRSBusTests.CommandBus.Fixture;
 
 public class SampleCommand : ICommand
 {
-    public readonly string Input;
+    public string Input;
 
     public SampleCommand(string input)
     {

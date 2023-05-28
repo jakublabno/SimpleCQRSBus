@@ -50,6 +50,20 @@ public class MiddlewareTest : CommandBusTestCase
         wasMiddlewareExecuted = secondMiddleware.Executed;
         Assert.IsTrue(wasMiddlewareExecuted);
     }
+    
+    [Test]
+    public void middleware_can_transform_given_messages()
+    {
+        var originMessage = "not transformed message";
+        var newMessage = "transformed property";
+        var transformingMiddleware = new TransformingMiddleware(newMessage);
+        AddMiddleWare(transformingMiddleware);
+        var command = new SampleCommand(originMessage);
+
+        CommandBus().Handle(command);
+        
+        Assert.AreEqual(newMessage, command.Input);
+    }
 
     private class FirstMiddleware : ICommandBusMiddleware
     {
@@ -74,6 +88,24 @@ public class MiddlewareTest : CommandBusTestCase
             var del = (IMessage message) => callable(message);
 
             return del;
+        }
+    }
+    
+    private class TransformingMiddleware : ICommandBusMiddleware
+    {
+        private readonly string transformTo;
+
+        public TransformingMiddleware(string transformTo)
+        {
+            this.transformTo = transformTo;
+        }
+
+        public dynamic? Execute(ICommand message, Func<IMessage, dynamic>? callable)
+        {
+            var msg = (SampleCommand)message;
+            msg.Input = transformTo;
+
+            return default;
         }
     }
 }
