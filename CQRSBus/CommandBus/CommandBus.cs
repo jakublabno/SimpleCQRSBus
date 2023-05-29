@@ -17,7 +17,7 @@ public class CommandBus : IBus<ICommand>
 
     public TResult Handle<TResult>(ICommand message)
     {
-        return executor.Execute(message);
+        return (TResult)executor.Execute(message);
     }
 
     public void Handle(ICommand message)
