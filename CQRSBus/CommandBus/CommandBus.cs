@@ -19,7 +19,7 @@ public class CommandBus : IBus<ICommand>
     {
         return executor.Execute(message);
     }
-    
+
     public void Handle(ICommand message)
     {
         executor.Execute(message);

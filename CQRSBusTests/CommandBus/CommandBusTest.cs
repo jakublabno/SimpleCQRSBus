@@ -11,20 +11,20 @@ public class CommandBusTest : CommandBusTestCase
         AddExecutorMiddleware();
         var input = "any input";
         var command = new SampleCommand(input);
-        
+
         var result = CommandBus().Handle<string>(command);
 
         var expectedResult = input;
-        Assert.AreEqual(expectedResult, result);
+        Assert.That(result, Is.EqualTo(expectedResult));
     }
-    
+
     [Test]
     public void handle_without_return()
     {
         AddExecutorMiddleware();
         var input = "any input";
         var command = new SampleCommand(input);
-        
+
         CommandBus().Handle(command);
 
         Assert.IsTrue(true);

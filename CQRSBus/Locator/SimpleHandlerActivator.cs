@@ -2,8 +2,10 @@ namespace CQRSBus.Locator;
 
 public class SimpleHandlerActivator : IHandlerCreator
 {
-    public object Create(Type handlerName)
+    public object Create(string handlerName)
     {
-        return Activator.CreateInstance(handlerName);
+        var type = Type.GetType(handlerName, true);
+        
+        return Activator.CreateInstance(type);
     }
 }

@@ -1,19 +1,22 @@
 using CQRSBus.CommandBus.Middleware;
 using CQRSBus.Locator;
 using CQRSBusTests.CommandBus.Double;
+using CQRSBusTests.CommandBus.Fixture;
 using Microsoft.Extensions.Logging;
 
 namespace CQRSBusTests.CommandBus;
 
 public abstract class CommandBusTestCase
 {
-    private readonly NameInflectorLocator handlerLocator = new("Handler");
+    private readonly InMemoryHandlerManager handlerManager = new();
     private readonly CommandBusMiddlewareCollection middlewareCollection = new();
 
     [SetUp]
     protected void Before()
     {
         middlewareCollection.Clear();
+        handlerManager.Clear();
+        handlerManager.Map(typeof(SampleCommand), new SampleCommandHandler());
     }
 
     protected CQRSBus.CommandBus.CommandBus CommandBus()
@@ -22,7 +25,7 @@ public abstract class CommandBusTestCase
 
         return bus;
     }
-    
+
     protected void AddLoggerMiddleware()
     {
         AddMiddleWare(new LoggingMiddleware(Logging.Get()));
@@ -30,15 +33,12 @@ public abstract class CommandBusTestCase
 
     protected void AddExecutorMiddleware()
     {
-        AddMiddleWare(new ExecutionMiddleware(handlerLocator, new SimpleHandlerActivator()));
+        AddMiddleWare(new ExecutionMiddleware(handlerManager, handlerManager));
     }
-    
+
     protected void AddMiddleWare(params ICommandBusMiddleware[] middlewares)
     {
-        foreach (var middleware in middlewares)
-        {
-            middlewareCollection.AddLast(middleware);
-        }
+        foreach (var middleware in middlewares) middlewareCollection.AddLast(middleware);
     }
 
     private static class Logging

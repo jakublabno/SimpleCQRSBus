@@ -17,9 +17,9 @@ public class LoggingMiddleware : ICommandBusMiddleware
     {
         var commandName = message.GetType().FullName;
         logger.Log(LogLevel.Information, $"Starting command {message.GetType().FullName}");
-        
+
         var result = (IMessage message) => callable(message);
-        
+
         logger.Log(LogLevel.Information, $"Finished command {message.GetType().FullName}");
 
         return default;

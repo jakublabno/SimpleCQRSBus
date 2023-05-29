@@ -6,8 +6,10 @@ namespace CQRSBus.CommandBus.Middleware;
 
 public class ExecutionMiddleware : ICommandBusMiddleware
 {
-    private readonly IHandlerLocator handlerLocator;
+    private delegate dynamic? HandlerInvoke(object target, ICommand executionContext);
+    
     private readonly IHandlerCreator handlerCreator;
+    private readonly IHandlerLocator handlerLocator;
 
     public ExecutionMiddleware(IHandlerLocator handlerLocator, IHandlerCreator handlerCreator)
     {
@@ -22,7 +24,7 @@ public class ExecutionMiddleware : ICommandBusMiddleware
 
         return handler
             .GetType()
-            .GetMethod("Handle", types: new[] { message.GetType() })
+            .GetMethod("Handle", new[] { message.GetType() })!
             .Invoke(handler, new object[] { message });
     }
 }

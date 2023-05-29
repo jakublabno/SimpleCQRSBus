@@ -2,5 +2,5 @@ namespace CQRSBus.Locator;
 
 public interface IHandlerCreator
 {
-    public object Create(Type handlerName);
+    public object Create(string handlerName);
 }
