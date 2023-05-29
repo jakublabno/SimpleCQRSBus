@@ -79,3 +79,6 @@ public class ChainableMiddleware : ICommandBusMiddleware
     }
 }
 ```
+
+## Upcoming
+Bus for events, queries
