@@ -69,8 +69,6 @@ var result = commandBus.Handle<string>(command); //fancy input
 ```csharp
 public class ChainableMiddleware : ICommandBusMiddleware
 {
-    public bool Executed;
-
     public dynamic? Execute(ICommand message, Func<IMessage, dynamic>? callable)
     {
         //put some logic here
