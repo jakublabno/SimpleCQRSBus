@@ -66,6 +66,7 @@ var result = commandBus.Handle<string>(command); //fancy input
 ```
 
 ## Sample middleware
+You can use middleware to manage transactions, logging, setting firewalls, validating command/queries etc.
 ```csharp
 public class ChainableMiddleware : ICommandBusMiddleware
 {
