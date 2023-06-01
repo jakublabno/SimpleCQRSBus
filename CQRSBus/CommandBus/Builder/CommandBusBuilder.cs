@@ -45,10 +45,8 @@ public sealed class CommandBusBuilder
     {
         var commandBusMiddlewares = new CommandBusMiddlewareCollection();
         
-        foreach (var middlewareBuilder in middlewareBuilders)
+        foreach (var middleware in middlewareBuilders.Select(middlewareBuilder => middlewareBuilder.Invoke()))
         {
-            var middleware = middlewareBuilder.Invoke();
-            
             commandBusMiddlewares.AddLast(middleware);
         }
 
