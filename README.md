@@ -5,15 +5,29 @@ Simple CQRS bus for .NET based applications
 ## Limitations
 For now, library supports only commands.
 
-## Configuration
+## Configuration using builder
 
+```csharp
+//Configure middleware implementing IMiddleware e.g. LogginMiddleware
+var loggingMiddleware = new LoggingMiddleware(NullLogger.Instance);
+
+//Inistantiate bus instance, you can set your own locator/middlewares using relevant builder's methods
+var commandBus = new CommandBusBuilder()
+    .AddDefaultHandlerLocator()
+    .AddDefaultHandlerFactory()
+    .AddMiddleware(loggingMiddleware)
+    .AddExecutionMiddleware()
+    .Build();
+```
+
+## Or configure on your own
 ```csharp
 
 //Initilize middleware collection <MiddlewareCollection>
 var middlewareCollection = new CommandBusMiddlewareCollection();
 
 //Configure middleware implementing IMiddleware e.g. LogginMiddleware
-var logginMiddleware = new LoggingMiddleware(NullLogger.Instance);
+var loggingMiddleware = new LoggingMiddleware(NullLogger.Instance);
 
 //Build default locators or create own implementation of <IHandlerLocator> and <IHandlerCreator>
 var handlerNameLocator = new AdditionInflectionStrategy("Handler");
@@ -26,7 +40,7 @@ var handlerActivator = new SimpleHandlerActivator();
 var executionMiddleware = new ExecutionMiddleware(handlerLocator, handlerActivator);
 
 //Add middlewares to collection
-middlewareCollection.AddLast(logginMiddleware);
+middlewareCollection.AddLast(loggingMiddleware);
 middlewareCollection.AddLast(executionMiddleware);
 
 //Inistantiate bus instance
@@ -81,5 +95,5 @@ public class ChainableMiddleware : ICommandBusMiddleware
 }
 ```
 
-## Upcoming
-Bus for events, queries
+## Upcoming`
+Bus for events, queries`

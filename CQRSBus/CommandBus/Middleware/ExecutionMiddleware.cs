@@ -6,21 +6,19 @@ namespace CQRSBus.CommandBus.Middleware;
 
 public class ExecutionMiddleware : ICommandBusMiddleware
 {
-    private delegate dynamic? HandlerInvoke(object target, ICommand executionContext);
-    
-    private readonly IHandlerCreator handlerCreator;
+    private readonly IHandlerFactory handlerFactory;
     private readonly IHandlerLocator handlerLocator;
 
-    public ExecutionMiddleware(IHandlerLocator handlerLocator, IHandlerCreator handlerCreator)
+    public ExecutionMiddleware(IHandlerLocator handlerLocator, IHandlerFactory handlerFactory)
     {
         this.handlerLocator = handlerLocator;
-        this.handlerCreator = handlerCreator;
+        this.handlerFactory = handlerFactory;
     }
 
     public dynamic? Execute(ICommand message, Func<IMessage, dynamic>? callable)
     {
         var handlerName = handlerLocator.Name(message);
-        var handler = handlerCreator.Create(handlerName);
+        var handler = handlerFactory.Create(handlerName);
 
         return handler
             .GetType()

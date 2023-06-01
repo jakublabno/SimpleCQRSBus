@@ -1,5 +1,4 @@
 using CQRSBus.CommandBus.Middleware;
-using CQRSBus.Locator;
 using CQRSBusTests.CommandBus.Double;
 using CQRSBusTests.CommandBus.Fixture;
 using Microsoft.Extensions.Logging;

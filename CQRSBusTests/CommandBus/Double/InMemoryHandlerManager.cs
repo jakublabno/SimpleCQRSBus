@@ -3,7 +3,7 @@ using CQRSBus.Specialized;
 
 namespace CQRSBusTests.CommandBus.Double;
 
-public class InMemoryHandlerManager : IHandlerLocator, IHandlerCreator
+public class InMemoryHandlerManager : IHandlerLocator, IHandlerFactory
 {
     private readonly Dictionary<Type, string> commandHandlerMap = new();
     private readonly Dictionary<string, object> handlerStorage = new();
