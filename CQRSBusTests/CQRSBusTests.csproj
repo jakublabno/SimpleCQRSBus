@@ -21,4 +21,8 @@
         <ProjectReference Include="..\CQRSBus\CQRSBus.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="CommandBus\Double" />
+    </ItemGroup>
+
 </Project>

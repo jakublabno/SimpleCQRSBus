@@ -1,6 +1,6 @@
 using CQRSBus.CommandBus.Middleware;
-using CQRSBusTests.CommandBus.Double;
 using CQRSBusTests.CommandBus.Fixture;
+using CQRSBusTests.Helper;
 using Microsoft.Extensions.Logging;
 
 namespace CQRSBusTests.CommandBus;
@@ -32,12 +32,12 @@ public abstract class CommandBusTestCase
 
     protected void AddExecutorMiddleware()
     {
-        AddMiddleWare(new ExecutionMiddleware(handlerManager, handlerManager));
+        AddMiddleWare(new CommandBusExecutionMiddleware(handlerManager, handlerManager));
     }
 
     protected void AddMiddleWare(params ICommandBusMiddleware[] middlewares)
     {
-        foreach (var middleware in middlewares) middlewareCollection.AddLast(middleware);
+        foreach (var middleware in middlewares) middlewareCollection.Add(middleware);
     }
 
     private static class Logging

@@ -1,55 +1,20 @@
+using CQRSBus.Builder;
 using CQRSBus.CommandBus.Middleware;
+using CQRSBus.CommandBus.Specialized;
 using CQRSBus.Locator;
+using CQRSBus.Middleware;
 
-namespace CQRSBus.Builder;
+namespace CQRSBus.CommandBus.Builder;
 
-public sealed class CommandBusBuilder
+public sealed class CommandBusBuilder : BusBuilder<CommandBus, ICommandBusMiddleware, ICommand>
 {
-    private readonly List<Func<dynamic>> middlewareBuilders = new();
-    
-    private IHandlerLocator? handlerLocator;
-    private IHandlerFactory? handlerFactory;
-    
-
-    public CommandBusBuilder AddMiddleware(ICommandBusMiddleware middleware)
+    protected override MiddlewareCollection<ICommandBusMiddleware, ICommand> CreateMiddlewareCollection()
     {
-        middlewareBuilders.Add(() => middleware);
-
-        return this;
+        return new CommandBusMiddlewareCollection();
     }
 
-    public CommandBusBuilder SetHandlerLocator(IHandlerLocator handlerLocator)
+    protected override ExecutionMiddleware<ICommand> CreateExecutionMiddleware(IHandlerLocator handlerLocator, IHandlerFactory handlerFactory)
     {
-        this.handlerLocator = handlerLocator;
-
-        return this;
-    }
-
-    public CommandBusBuilder SetHandlerFactory(IHandlerFactory handlerFactory)
-    {
-        this.handlerFactory = handlerFactory;
-
-        return this;
-    }
-    
-    public CommandBusBuilder AddExecutionMiddleware()
-    {
-        var middleware = () => new ExecutionMiddleware(handlerLocator, handlerFactory);
-        
-        middlewareBuilders.Add(middleware);
-
-        return this;
-    }
-
-    public CommandBus.CommandBus Build()
-    {
-        var commandBusMiddlewares = new CommandBusMiddlewareCollection();
-        
-        foreach (var middleware in middlewareBuilders.Select(middlewareBuilder => middlewareBuilder.Invoke()))
-        {
-            commandBusMiddlewares.AddLast(middleware);
-        }
-
-        return new CommandBus.CommandBus(commandBusMiddlewares);
+        return new CommandBusExecutionMiddleware(handlerLocator, handlerFactory);
     }
 }

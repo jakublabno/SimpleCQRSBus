@@ -1,6 +1,6 @@
 using CQRSBus.Locator;
 
-namespace CQRSBus.Builder;
+namespace CQRSBus.CommandBus.Builder;
 
 public static class HandlerLocatorBuilderExtension
 {
@@ -9,6 +9,6 @@ public static class HandlerLocatorBuilderExtension
         var locatorNameInflector = new AdditionInflectionStrategy("Handler");
         var handlerLocator = new NameInflectorLocator(locatorNameInflector);
 
-        return builder.SetHandlerLocator(handlerLocator);
+        return (CommandBusBuilder)builder.SetHandlerLocator(handlerLocator);
     }
 }

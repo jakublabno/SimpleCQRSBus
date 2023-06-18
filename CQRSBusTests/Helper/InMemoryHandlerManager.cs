@@ -1,7 +1,7 @@
 using CQRSBus.Locator;
 using CQRSBus.Specialized;
 
-namespace CQRSBusTests.CommandBus.Double;
+namespace CQRSBusTests.Helper;
 
 public class InMemoryHandlerManager : IHandlerLocator, IHandlerFactory
 {

@@ -4,11 +4,21 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Title>CQRS Bus</Title>
+        <Authors>Jakub Łabno</Authors>
+        <Description>CQRS Bus</Description>
+        <PackageProjectUrl>https://github.com/jakublabno/SimpleCQRSBus</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jakublabno/SimpleCQRSBus</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+        <None Include="docs/README.md" Pack="true" PackagePath="\" />
+        <None Include="licenses/LICENSE" Pack="true" PackagePath="\" />
     </ItemGroup>
-
 </Project>
